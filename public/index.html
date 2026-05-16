@@ -719,9 +719,8 @@
     <li><a href="#testimonials">Alumni</a></li>
   </ul>
   <a href="#cta" class="nav-cta">Apply Now</a>
-  <div class="hamburger" onclick="this.classList.toggle('open')">
-    <span></span><span></span><span></span>
-  </div>
+   
+     <div class="hamburger" onclick="toggleMenu()" id="hamburger"></div>
 </nav>
 
 <!-- HERO -->
@@ -1106,6 +1105,18 @@
       el.textContent = start + suffix;
     }, 16);
   }
+  function toggleMenu() {
+  const links = document.querySelector('.nav-links');
+  const cta = document.querySelector('.nav-cta');
+  links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
+  links.style.flexDirection = 'column';
+  links.style.position = 'absolute';
+  links.style.top = '60px';
+  links.style.left = '0';
+  links.style.right = '0';
+  links.style.background = 'rgba(10,22,40,0.98)';
+  links.style.padding = '1rem 2rem';
+}
 </script>
 </body>
 </html>
