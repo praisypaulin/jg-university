@@ -12,8 +12,7 @@ A modern, responsive landing page redesign inspired by [jguni.in](https://jguni.
 - Hero, About, Programs, Testimonials, CTA, Footer sections
 
 ## Live Demo
-[View Live](jg-university-nine.vercel.app
-) <!-- replace with Vercel link after deployment -->
+[View Live](https://jg-university-nine.vercel.app) <!-- replace with Vercel link after deployment -->
 
 ## Setup
 npm install
