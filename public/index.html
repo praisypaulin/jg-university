@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JG University — Knowledge Beyond Books</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0a1628;
+      --gold: #d4a843;
+      --gold-light: #f0c96a;
+      --cream: #faf6ef;
+      --rust: #c45c2e;
+      --sage: #4a6b5b;
+      --text: #1a1a2e;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 1.2rem 4rem;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(10, 22, 40, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(212, 168, 67, 0.2);
+      transition: all 0.3s ease;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--gold);
+      letter-spacing: 0.02em;
+    }
+    .nav-logo span { color: #fff; }
+    .nav-links {
+      display: flex; gap: 2.5rem; list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta {
+      background: var(--gold);
+      color: var(--navy);
+      padding: 0.6rem 1.6rem;
+      border-radius: 2px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+    /* hamburger */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 24px; height: 2px; background: var(--gold); transition: all 0.3s; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      background: var(--navy);
+      position: relative;
+      display: flex; align-items: center;
+      overflow: hidden;
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(212,168,67,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(212,168,67,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-glow {
+      position: absolute;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(212,168,67,0.15) 0%, transparent 70%);
+      top: -200px; right: -200px;
+      animation: pulse 6s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.7; }
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 4rem; padding-top: 8rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+    .hero-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--gold);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+    }
+    .hero-h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 5vw, 5rem);
+      line-height: 1.05;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+    }
+    .hero-h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero-sub {
+      color: rgba(255,255,255,0.6);
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+      max-width: 480px;
+      opacity: 0;
+    }
+    .hero-btns {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      opacity: 0;
+    }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy);
+      padding: 0.9rem 2.2rem;
+      border-radius: 2px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: all 0.25s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,168,67,0.35); }
+    .btn-outline {
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
+      padding: 0.9rem 2.2rem;
+      border-radius: 2px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: all 0.25s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+    .hero-stats {
+      opacity: 0;
+      display: flex; gap: 2.5rem; margin-top: 3.5rem;
+    }
+    .stat-item { }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--gold);
+      font-weight: 700;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Hero Visual */
+    .hero-visual {
+      position: relative;
+      opacity: 0;
+    }
+    .hero-card-main {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(212,168,67,0.2);
+      border-radius: 4px;
+      padding: 2rem;
+      backdrop-filter: blur(8px);
+    }
+    .programs-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    }
+    .prog-card {
+      background: rgba(212,168,67,0.08);
+      border: 1px solid rgba(212,168,67,0.15);
+      border-radius: 3px;
+      padding: 1.25rem;
+      transition: all 0.3s;
+      cursor: default;
+    }
+    .prog-card:hover {
+      background: rgba(212,168,67,0.15);
+      border-color: rgba(212,168,67,0.4);
+      transform: translateY(-3px);
+    }
+    .prog-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .prog-name {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .prog-desc {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: 0.25rem;
+    }
+    .hero-badge {
+      position: absolute;
+      top: -1.5rem; right: -1.5rem;
+      background: var(--rust);
+      color: #fff;
+      padding: 0.75rem 1.25rem;
+      border-radius: 3px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      text-align: center;
+      line-height: 1.4;
+      transform: rotate(3deg);
+    }
+
+    /* ── TICKER ── */
+    .ticker {
+      background: var(--gold);
+      color: var(--navy);
+      padding: 0.75rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .ticker-track {
+      display: inline-block;
+      animation: ticker 30s linear infinite;
+    }
+    .ticker-track span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0 3rem;
+    }
+    .ticker-track span::before {
+      content: '◆';
+      margin-right: 3rem;
+      opacity: 0.5;
+    }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── ABOUT ── */
+    #about {
+      padding: 8rem 4rem;
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center;
+    }
+    .section-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--rust);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .section-h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3.5rem);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      color: var(--navy);
+    }
+    .section-h2 em { font-style: italic; color: var(--rust); }
+    .section-p {
+      color: #555;
+      line-height: 1.8;
+      font-size: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .about-pillars {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem;
+    }
+    .pillar {
+      border-left: 3px solid var(--gold);
+      padding: 0.75rem 1rem;
+      background: rgba(212,168,67,0.05);
+    }
+    .pillar-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--navy);
+      margin-bottom: 0.25rem;
+    }
+    .pillar-text { font-size: 0.8rem; color: #777; line-height: 1.5; }
+
+    .about-visual {
+      position: relative;
+    }
+    .about-img-frame {
+      background: var(--navy);
+      border-radius: 4px;
+      padding: 3rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-img-frame::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--gold), var(--rust));
+    }
+    .about-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-style: italic;
+      color: #fff;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+    .about-quote-attr {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .about-numbers {
+      display: flex; gap: 2rem; margin-top: 2.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 2rem;
+    }
+    .about-num { text-align: center; }
+    .about-num-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--gold);
+    }
+    .about-num-label { font-size: 0.75rem; color: rgba(255,255,255,0.4); }
+    .about-decoration {
+      position: absolute;
+      bottom: -2rem; right: -2rem;
+      width: 120px; height: 120px;
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      opacity: 0.15;
+    }
+
+    /* ── PROGRAMS ── */
+    #programs {
+      background: var(--navy);
+      padding: 8rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    #programs::before {
+      content: 'PROGRAMS';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Playfair Display', serif;
+      font-size: 18vw;
+      color: rgba(255,255,255,0.02);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .programs-header {
+      text-align: center;
+      max-width: 600px; margin: 0 auto 5rem;
+    }
+    .programs-header .section-h2 { color: #fff; }
+    .programs-header .section-p { color: rgba(255,255,255,0.5); }
+    .programs-cards {
+      max-width: 1200px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .program-card {
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 4px;
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s;
+      cursor: pointer;
+    }
+    .program-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+      transform-origin: left;
+    }
+    .program-card:hover::before { transform: scaleX(1); }
+    .program-card:hover {
+      border-color: rgba(212,168,67,0.25);
+      background: rgba(212,168,67,0.04);
+      transform: translateY(-4px);
+    }
+    .pc-icon {
+      width: 52px; height: 52px;
+      background: rgba(212,168,67,0.1);
+      border-radius: 3px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .pc-level {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.5rem;
+    }
+    .pc-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: #fff;
+      margin-bottom: 0.75rem;
+    }
+    .pc-desc { font-size: 0.85rem; color: rgba(255,255,255,0.45); line-height: 1.6; margin-bottom: 1.5rem; }
+    .pc-link {
+      font-size: 0.8rem;
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .pc-link::after { content: '→'; transition: transform 0.2s; }
+    .pc-link:hover::after { transform: translateX(4px); }
+
+    /* ── FEATURES ── */
+    #features {
+      padding: 8rem 4rem;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .features-header {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: end; margin-bottom: 5rem;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+    .feature-item {
+      padding: 2rem;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+    .feature-item:hover {
+      border-color: var(--gold);
+      box-shadow: 0 8px 32px rgba(212,168,67,0.1);
+      transform: translateY(-3px);
+    }
+    .fi-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--gold);
+      letter-spacing: 0.15em;
+      margin-bottom: 1rem;
+    }
+    .fi-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--navy);
+      margin-bottom: 0.75rem;
+    }
+    .fi-text { font-size: 0.875rem; color: #666; line-height: 1.7; }
+    .fi-icon { font-size: 2rem; margin-bottom: 1rem; }
+
+    /* ── TESTIMONIALS ── */
+    #testimonials {
+      background: #f3ede3;
+      padding: 8rem 4rem;
+      position: relative;
+    }
+    .testimonials-inner {
+      max-width: 1200px; margin: 0 auto;
+    }
+    .testimonials-header {
+      text-align: center; margin-bottom: 4rem;
+    }
+    .testimonials-track {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    .testi-card {
+      background: #fff;
+      border-radius: 4px;
+      padding: 2.5rem;
+      position: relative;
+      transition: transform 0.3s;
+    }
+    .testi-card:hover { transform: translateY(-4px); }
+    .testi-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .testi-text {
+      font-size: 0.9rem;
+      color: #555;
+      line-height: 1.75;
+      margin-bottom: 2rem;
+      font-style: italic;
+    }
+    .testi-author {
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .testi-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .testi-name { font-weight: 600; font-size: 0.9rem; color: var(--navy); }
+    .testi-role { font-size: 0.75rem; color: #999; }
+
+    /* ── CTA ── */
+    #cta {
+      background: var(--navy);
+      padding: 8rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #cta::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 50%, rgba(196,92,46,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 50%, rgba(212,168,67,0.15) 0%, transparent 60%);
+    }
+    .cta-inner { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+    .cta-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--gold);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .cta-h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .cta-h2 em { font-style: italic; color: var(--gold); }
+    .cta-p { color: rgba(255,255,255,0.5); font-size: 1.05rem; line-height: 1.7; margin-bottom: 3rem; }
+    .cta-form {
+      display: flex; gap: 0; max-width: 480px; margin: 0 auto;
+      border: 1px solid rgba(212,168,67,0.3);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .cta-input {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: none;
+      padding: 1rem 1.5rem;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .cta-input::placeholder { color: rgba(255,255,255,0.3); }
+    .cta-submit {
+      background: var(--gold);
+      color: var(--navy);
+      border: none;
+      padding: 1rem 2rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .cta-submit:hover { background: var(--gold-light); }
+    .cta-trust {
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #060d1a;
+      padding: 5rem 4rem 2rem;
+      color: rgba(255,255,255,0.4);
+    }
+    .footer-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem;
+      margin-bottom: 4rem;
+    }
+    .footer-brand .nav-logo { font-size: 1.75rem; margin-bottom: 1rem; display: block; }
+    .footer-brand p { font-size: 0.875rem; line-height: 1.7; max-width: 280px; }
+    .footer-col h4 {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 1.25rem;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 0.6rem; }
+    .footer-col a {
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--gold); }
+    .footer-bottom {
+      max-width: 1200px; margin: 0 auto;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+      font-size: 0.8rem;
+    }
+    .footer-socials { display: flex; gap: 1rem; }
+    .social-btn {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+    .social-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── SCROLL ANIMATIONS ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .hero-content { grid-template-columns: 1fr; gap: 3rem; }
+      .hero-visual { display: none; }
+      #about { grid-template-columns: 1fr; }
+      .programs-cards { grid-template-columns: 1fr 1fr; }
+      .features-header { grid-template-columns: 1fr; }
+      .testimonials-track { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .hero-content { padding: 0 1.5rem; padding-top: 7rem; }
+      #about, #features { padding: 5rem 1.5rem; }
+      #programs, #testimonials, #cta { padding: 5rem 1.5rem; }
+      .programs-cards { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+      footer { padding: 3rem 1.5rem 1.5rem; }
+      .about-pillars { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">JG<span>University</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#programs">Programs</a></li>
+    <li><a href="#features">Campus Life</a></li>
+    <li><a href="#testimonials">Alumni</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Apply Now</a>
+  <div class="hamburger" onclick="this.classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div>
+      <p class="hero-tag">Est. 1965 · UGC Approved · Ahmedabad, Gujarat</p>
+      <h1 class="hero-h1">Knowledge<br>Beyond<br><em>Books.</em></h1>
+      <p class="hero-sub">A new-age, tech-driven university where experiential learning meets industry relevance. Prepare for the careers of tomorrow, today.</p>
+      <div class="hero-btns">
+        <a href="#cta" class="btn-primary">Apply for 2026</a>
+        <a href="#programs" class="btn-outline">Explore Programs</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">17+</div>
+          <div class="stat-label">Colleges</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">25 LPA</div>
+          <div class="stat-label">Highest Package</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">60+</div>
+          <div class="stat-label">Years Legacy</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-card-main">
+        <p style="font-family:'Space Mono',monospace;font-size:0.65rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:1.5rem;">Popular Programs</p>
+        <div class="programs-grid">
+          <div class="prog-card">
+            <div class="prog-icon">💻</div>
+            <div class="prog-name">MCA</div>
+            <div class="prog-desc">Master of Computer Applications</div>
+          </div>
+          <div class="prog-card">
+            <div class="prog-icon">📊</div>
+            <div class="prog-name">MBA</div>
+            <div class="prog-desc">Master of Business Admin.</div>
+          </div>
+          <div class="prog-card">
+            <div class="prog-icon">🔒</div>
+            <div class="prog-name">BCA</div>
+            <div class="prog-desc">Cyber Security Specialisation</div>
+          </div>
+          <div class="prog-card">
+            <div class="prog-icon">🏦</div>
+            <div class="prog-name">B.Com</div>
+            <div class="prog-desc">Commerce & FinTech</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-badge">Admissions<br>Open<br>2026–27</div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span>TCS Recruiter</span>
+    <span>Amazon Partner</span>
+    <span>Infosys Tie-up</span>
+    <span>UGC Approved</span>
+    <span>Paid Internships ₹15,000/mo</span>
+    <span>100% Placement Support</span>
+    <span>Industry Curriculum</span>
+    <span>Research-Driven Pedagogy</span>
+    <!-- duplicate for seamless loop -->
+    <span>TCS Recruiter</span>
+    <span>Amazon Partner</span>
+    <span>Infosys Tie-up</span>
+    <span>UGC Approved</span>
+    <span>Paid Internships ₹15,000/mo</span>
+    <span>100% Placement Support</span>
+    <span>Industry Curriculum</span>
+    <span>Research-Driven Pedagogy</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="fade-up">
+    <p class="section-eyebrow">Who We Are</p>
+    <h2 class="section-h2">Shaping Global<br><em>Change Makers</em></h2>
+    <p class="section-p">JG University is a tech-driven institution in the heart of Ahmedabad, Gujarat. Sponsored by the ASIA Charitable Trust — active in education since 1965 — we evolve our programs to match the demands of the future workforce.</p>
+    <p class="section-p">Our pedagogy fuses academic rigor with real-world exposure: industry partnerships, live projects, paid internships, and mentorship from domain experts who bridge theory and practice.</p>
+    <div class="about-pillars">
+      <div class="pillar">
+        <div class="pillar-title">Whole Brain Learning</div>
+        <div class="pillar-text">Fusing technical mastery with creative thinking.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">Industry Connect</div>
+        <div class="pillar-text">Direct pathways to TCS, Amazon, Infosys & more.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">Research Focus</div>
+        <div class="pillar-text">PhD programs with UGC-recognised supervision.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">Global Perspective</div>
+        <div class="pillar-text">Curriculum designed for the international stage.</div>
+      </div>
+    </div>
+  </div>
+  <div class="about-visual fade-up">
+    <div class="about-img-frame">
+      <p class="about-quote">"Excellence is a matter of choice. If we choose to be excellent, we will be for sure."</p>
+      <p class="about-quote-attr">— Dr. CA Achyut Dani, Vice Chancellor</p>
+      <div class="about-numbers">
+        <div class="about-num">
+          <div class="about-num-val">3</div>
+          <div class="about-num-label">Schools</div>
+        </div>
+        <div class="about-num">
+          <div class="about-num-val">17</div>
+          <div class="about-num-label">Colleges</div>
+        </div>
+        <div class="about-num">
+          <div class="about-num-val">5000+</div>
+          <div class="about-num-label">Alumni Placed</div>
+        </div>
+      </div>
+    </div>
+    <div class="about-decoration"></div>
+  </div>
+</section>
+
+<!-- PROGRAMS -->
+<section id="programs">
+  <div class="programs-header fade-up">
+    <p class="section-eyebrow" style="color:var(--gold)">What We Offer</p>
+    <h2 class="section-h2">Programs That<br><em>Evolve With Industry</em></h2>
+    <p class="section-p">From undergraduate to doctoral — every program is engineered around the careers of tomorrow.</p>
+  </div>
+  <div class="programs-cards">
+    <div class="program-card fade-up">
+      <div class="pc-icon">🎓</div>
+      <p class="pc-level">Undergraduate</p>
+      <h3 class="pc-name">BBA / BCA / B.Com</h3>
+      <p class="pc-desc">Build a strong foundation in business, computing, and commerce with hands-on industry exposure from day one.</p>
+      <a href="#" class="pc-link">View Courses</a>
+    </div>
+    <div class="program-card fade-up">
+      <div class="pc-icon">🔬</div>
+      <p class="pc-level">Postgraduate</p>
+      <h3 class="pc-name">MBA / MCA / M.Com</h3>
+      <p class="pc-desc">Deepen expertise with specialisations in Data Science, FinTech, Cyber Security, and Digital Marketing.</p>
+      <a href="#" class="pc-link">View Courses</a>
+    </div>
+    <div class="program-card fade-up">
+      <div class="pc-icon">🏆</div>
+      <p class="pc-level">Doctoral</p>
+      <h3 class="pc-name">PhD Programs</h3>
+      <p class="pc-desc">Conduct ground-breaking research guided by eminent faculty and industry leaders. NET/SLET holders get direct admission.</p>
+      <a href="#" class="pc-link">View Courses</a>
+    </div>
+    <div class="program-card fade-up">
+      <div class="pc-icon">🛡️</div>
+      <p class="pc-level">Specialisation</p>
+      <h3 class="pc-name">Cyber Security & IoT</h3>
+      <p class="pc-desc">Future-proof skills in cloud technology, IoT, and security — among the fastest growing fields globally.</p>
+      <a href="#" class="pc-link">View Courses</a>
+    </div>
+    <div class="program-card fade-up">
+      <div class="pc-icon">🎬</div>
+      <p class="pc-level">Creative Tech</p>
+      <h3 class="pc-name">Animation & VFX</h3>
+      <p class="pc-desc">Industry-aligned creative programs with small cohorts, daily studio sessions, and real production pipelines.</p>
+      <a href="#" class="pc-link">View Courses</a>
+    </div>
+    <div class="program-card fade-up">
+      <div class="pc-icon">🏦</div>
+      <p class="pc-level">Professional Diploma</p>
+      <h3 class="pc-name">PGDBF — Banking & Finance</h3>
+      <p class="pc-desc">100% placement assurance. IIBF certified. Partnered with India's top banks for guaranteed career entry.</p>
+      <a href="#" class="pc-link">View Courses</a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES / CAMPUS LIFE -->
+<section id="features">
+  <div class="features-header">
+    <div class="fade-up">
+      <p class="section-eyebrow">Why JG University</p>
+      <h2 class="section-h2">A Campus Built for<br><em>Tomorrow's Leaders</em></h2>
+    </div>
+    <div class="fade-up">
+      <p class="section-p">Every aspect of JG University — from the curriculum to the campus culture — is designed to give students an unfair advantage in their careers and lives.</p>
+      <a href="#cta" class="btn-primary" style="margin-top:1.5rem;display:inline-block;">Apply Now →</a>
+    </div>
+  </div>
+  <div class="features-grid">
+    <div class="feature-item fade-up">
+      <div class="fi-icon">🏭</div>
+      <p class="fi-num">01</p>
+      <h3 class="fi-title">Real-World Projects</h3>
+      <p class="fi-text">Every student completes live industry projects — not just case studies. You'll graduate with a portfolio that proves your skills.</p>
+    </div>
+    <div class="feature-item fade-up">
+      <div class="fi-icon">🤝</div>
+      <p class="fi-num">02</p>
+      <h3 class="fi-title">Paid Internships</h3>
+      <p class="fi-text">PG students receive a minimum ₹15,000/month internship stipend. Real income while you learn, through our Industry Connect network.</p>
+    </div>
+    <div class="feature-item fade-up">
+      <div class="fi-icon">🧠</div>
+      <p class="fi-num">03</p>
+      <h3 class="fi-title">Expert Mentorship</h3>
+      <p class="fi-text">Our faculty blend academic knowledge with decades of real-world experience — professors who've led organisations, not just studied them.</p>
+    </div>
+    <div class="feature-item fade-up">
+      <div class="fi-icon">🌍</div>
+      <p class="fi-num">04</p>
+      <h3 class="fi-title">Global-Standard Campus</h3>
+      <p class="fi-text">State-of-the-art infrastructure at our Asia Campus, Thaltej — designed to foster collaboration, creativity, and community.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="testimonials-inner">
+    <div class="testimonials-header fade-up">
+      <p class="section-eyebrow">Alumni Voices</p>
+      <h2 class="section-h2" style="color:var(--navy)">From Our<br><em>Community</em></h2>
+    </div>
+    <div class="testimonials-track">
+      <div class="testi-card fade-up">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">My education at JG has been instrumental in shaping my career. The comprehensive academic program and exceptional faculty gave me a solid grounding that I use as General Manager every single day.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:var(--navy)">R</div>
+          <div>
+            <div class="testi-name">Rahul Mehta</div>
+            <div class="testi-role">General Manager · M.Com Graduate</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card fade-up">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">The BBA program gave me a strong foundation in business and a focus on experiential learning through internships and real-world projects. I draw upon these skills every day as a Senior Business Development Manager.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:var(--rust)">P</div>
+          <div>
+            <div class="testi-name">Priya Shah</div>
+            <div class="testi-role">Sr. BDM · KGL India Shipping Line</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card fade-up">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">JG University provided possibilities that have the potential to change lives. The use of modern technology in the classroom kept me genuinely engaged — and I left ready for the industry.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:var(--sage)">A</div>
+          <div>
+            <div class="testi-name">Aakash Joshi</div>
+            <div class="testi-role">VP · Future Generali Insurance</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-inner fade-up">
+    <p class="cta-tag">Admissions 2026–27 Now Open</p>
+    <h2 class="cta-h2">Your Future<br>Starts <em>Here</em></h2>
+    <p class="cta-p">Join thousands of students who chose JG University to build careers that matter. UG, PG, and PhD applications are open. No entrance exam required for most UG courses.</p>
+    <div class="cta-form">
+      <input type="email" class="cta-input" placeholder="Enter your email address" />
+      <button class="cta-submit">Get Prospectus</button>
+    </div>
+    <p class="cta-trust">Or call us: +91 90996 55501 · admission@jguni.in</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="nav-logo">JG<span>University</span></span>
+      <p>A tech-driven, UGC-approved university in Ahmedabad, Gujarat. Empowering students since 1965 through the ASIA Charitable Trust.</p>
+      <p style="margin-top:1rem;font-size:0.8rem;">Asia Campus, Drive-In Road, Thaltej,<br>Ahmedabad – 380054, Gujarat, India</p>
+    </div>
+    <div class="footer-col">
+      <h4>Programs</h4>
+      <ul>
+        <li><a href="#">MBA</a></li>
+        <li><a href="#">MCA</a></li>
+        <li><a href="#">BBA / BCA</a></li>
+        <li><a href="#">B.Com / M.Com</a></li>
+        <li><a href="#">Animation & VFX</a></li>
+        <li><a href="#">PGDBF</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>University</h4>
+      <ul>
+        <li><a href="#">About JG</a></li>
+        <li><a href="#">Leadership</a></li>
+        <li><a href="#">Research</a></li>
+        <li><a href="#">Industry Connect</a></li>
+        <li><a href="#">Campus Life</a></li>
+        <li><a href="#">News & Events</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Admissions</h4>
+      <ul>
+        <li><a href="#">Apply Online</a></li>
+        <li><a href="#">Eligibility</a></li>
+        <li><a href="#">Fee Structure</a></li>
+        <li><a href="#">Scholarships</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 JG University. All rights reserved. | ASIA Charitable Trust</p>
+    <div class="footer-socials">
+      <a href="#" class="social-btn">in</a>
+      <a href="#" class="social-btn">fb</a>
+      <a href="#" class="social-btn">tw</a>
+      <a href="#" class="social-btn">yt</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── Hero entrance animations ──
+  gsap.registerPlugin(ScrollTrigger);
+
+  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  tl.to('.hero-tag',   { opacity: 1, duration: 0.6, delay: 0.3 })
+    .to('.hero-h1',    { opacity: 1, y: 0, duration: 0.8 }, '-=0.3')
+    .to('.hero-sub',   { opacity: 1, duration: 0.6 }, '-=0.4')
+    .to('.hero-btns',  { opacity: 1, duration: 0.5 }, '-=0.3')
+    .to('.hero-stats', { opacity: 1, duration: 0.5 }, '-=0.3')
+    .to('.hero-visual',{ opacity: 1, duration: 0.7 }, '-=0.5');
+
+  // ── Scroll fade-up ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 100);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // ── Navbar scroll behavior ──
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (window.scrollY > 60) {
+      nav.style.padding = '0.75rem 4rem';
+      nav.style.borderBottom = '1px solid rgba(212,168,67,0.3)';
+    } else {
+      nav.style.padding = '1.2rem 4rem';
+    }
+  });
+
+  // ── Counter animation ──
+  function animateCounter(el, target, suffix = '') {
+    let start = 0;
+    const duration = 1500;
+    const step = Math.ceil(target / (duration / 16));
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) { start = target; clearInterval(timer); }
+      el.textContent = start + suffix;
+    }, 16);
+  }
+</script>
+</body>
+</html>
